@@ -18,12 +18,29 @@
       </ul>
 
       <ul class="nav justify-content-end">
-        <li class="nav-item">
+
+        {% if session["logged_in"] %}
+
+          <li class="nav-item">
+          <a class="nav-link active"  href="/dashboard">Kontrol Paneli</a>
+          </li>
+
+          <li class="nav-item">
+          <a class="nav-link active"  href="/logout">Çıkış Yap</a>
+          </li>
+        
+        {% else %}
+
+          <li class="nav-item">
           <a class="nav-link active"  href="/login">Giriş Yap</a>
-        </li>
-        <li class="nav-item">
+          </li>
+
+          <li class="nav-item">
           <a class="nav-link active"  href="/register">Kayıt Ol</a>
-        </li>
+          </li>
+
+        {% endif %}
+        
        
       </ul>
      
