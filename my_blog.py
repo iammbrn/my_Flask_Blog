@@ -2,6 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, session, log
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+from functools import wraps
 
 
 app = Flask(__name__)
@@ -14,6 +15,17 @@ app.config['MYSQL_DB'] = 'my_blog'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "logged_in" in session: #Giriş yapılmış mı kontrol ediyoruz.
+            return f(*args, **kwargs) #giriş yapıldıysa karışmıyoruz.
+        else: 
+            flash("Bu sayfayı görüntülemek için lütfen giriş yapın.", "danger")
+            return redirect(url_for("login"))
+    return decorated_function
 
 
 #Creating user register form:
@@ -36,6 +48,32 @@ class LoginForm(Form):
     password = PasswordField("Parola", validators = [validators.DataRequired(message = "Lütfen parolanızı giriniz...")])
 
 
+
+
+
+
+
+@app.route("/")
+def index():
+    numbers = [1, 2, 3]
+    
+    return render_template("index.html", numbers = numbers)
+
+@app.route("/about") # İstek(request) atılan URL.
+@login_required
+def about():         # İsteğe cevap(response) döndüren fonksiyon.
+    return render_template("about.html")
+
+
+@app.route("/about/iammbrn")
+def user():
+    return "iammbrn Hakkında"
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    numbers = [1, 2, 3]
+    return render_template("dashboard.html", numbers = numbers)
 
 
 @app.route("/register", methods = ["GET", "POST"])
@@ -78,7 +116,7 @@ def login():
 
         cursor = mysql.connection.cursor()
 
-        query = "SELECT password FROM users WHERE username = %s OR email = %s"
+        query = "SELECT username, password FROM users WHERE username = %s OR email = %s"
 
         cursor.execute(query, (entered_username_or_email, entered_username_or_email))
 
@@ -88,8 +126,13 @@ def login():
 
         stored_password = user["password"]
 
+
         if user and sha256_crypt.verify(entered_password, stored_password):     
             flash("Giriş başarılı. Hoşgeldiniz :)", "success")
+
+            session["logged_in"] = True
+            session["username"] = user["username"]
+
             return redirect(url_for("index"))
         
         else:    
@@ -100,22 +143,11 @@ def login():
         return render_template("login.html", form = form)
 
     
-
-
-@app.route("/")
-def index():
-    numbers = [1, 2, 3]
-    
-    return render_template("index.html", numbers = numbers)
-
-@app.route("/about") # İstek(request) atılan URL.
-def about():         # İsteğe cevap(response) döndüren fonksiyon.
-    return render_template("about.html")
-
-
-@app.route("/about/iammbrn")
-def user():
-    return "iammbrn Hakkında"
+@app.route("/logout")
+@login_required
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
 
 
 @app.route("/articles")
