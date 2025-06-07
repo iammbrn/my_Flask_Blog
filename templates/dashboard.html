@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>Kontrol Paneli</h3>
+<small>Hoşgeldin, {{session["username"]}} </small>
+<hr>
+
+{% for number in numbers %}
+<div class="card">
+  <div class="card-header">
+    My Blog
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">iammbrn blog sayfasına hoşgeldiniz.</h5>
+    <p class="card-text">Bu blog sayfası, iammbrn adına özel bir blog sayfasıdır.</p>
+    {% if number == 1 %}
+        <a href="/addarticle" class="btn btn-primary">Makale Ekle</a> <br>
+    {% elif number == 2 %}
+        <a href="/updatearticle" class="btn btn-primary">Makale Düzenle</a> <br>
+    {% else %}
+        <a href="/deletearticle" class="btn btn-primary">Makale Sil</a>
+    {% endif %}
+    
+  </div>
+</div>
+
+{% endfor %}
+{% endblock body %}
+
