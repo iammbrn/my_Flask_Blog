@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+{% for number in numbers %}
+<div class="card">
+  <div class="card-header">
+    My Blog
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">iammbrn blog sayfasına hoşgeldiniz.</h5>
+    <p class="card-text">Bu blog sayfası, iammbrn adına özel bir blog sayfasıdır.</p>
+    {% if number == 1 %}
+        <a href="/resume" class="btn btn-primary">Özgeçmiş</a> <br>
+    {% elif number == 2 %}
+        <a href="/about" class="btn btn-primary">Hakkımda</a> <br>
+    {% else %}
+        <a href="/articles" class="btn btn-primary">Makaleler</a>
+    {% endif %}
+    
+  </div>
+</div>
+
+{% endfor %}
+
+
+{% endblock body %}
