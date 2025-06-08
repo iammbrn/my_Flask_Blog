@@ -6,25 +6,52 @@
 <small>Hoşgeldin, {{session["username"]}} </small>
 <hr>
 
-{% for number in numbers %}
 <div class="card">
   <div class="card-header">
-    My Blog
+  <a href="/addarticle" class="btn btn-success">Makale Ekle</a> <a href="/addarticle" class="btn btn-success">Makale Ekle</a> <br>
   </div>
   <div class="card-body">
-    <h5 class="card-title">iammbrn blog sayfasına hoşgeldiniz.</h5>
-    <p class="card-text">Bu blog sayfası, iammbrn adına özel bir blog sayfasıdır.</p>
-    {% if number == 1 %}
-        <a href="/addarticle" class="btn btn-success">Makale Ekle</a> <br>
-    {% elif number == 2 %}
-        <a href="/updatearticle" class="btn btn-primary">Makale Düzenle</a> <br>
-    {% else %}
-        <a href="/deletearticle" class="btn btn-danger">Makale Sil</a>
-    {% endif %}
-    
+      <a href="/addarticle" class="btn btn-success">Makale Ekle</a> <br>
   </div>
 </div>
 
-{% endfor %}
+{% if articles %}
+
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Başlık</th>
+          <th scope="col">Tarih</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      {% for article in articles %}
+      <tbody>
+        <tr>
+          <th scope="row">{{article.id}}</th>
+          <td>{{article.title}}</td>
+          <td>{{article.created_date}}</td>
+          <td><a href="/viewarticle/{{article.id}}" class="btn btn-success">Görüntüle</a></td>
+          <td><a href="/editarticle/{{article.id}}" class="btn btn-primary">Düzenle</a></td>
+          <td><a href="/deletearticle/{{article.id}}" class="btn btn-danger">Sil</a></td>
+        </tr>
+      </tbody>
+    </table>
+    {% endfor %}
+
+{% else %}
+
+  <div class="alert alert-danger" role="alert">
+  Yayınlanmış makaleniz bulunmuyor.
+  </div>
+
+{% endif %}
+
+
+
 {% endblock body %}
 
