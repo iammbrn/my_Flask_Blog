@@ -2,31 +2,29 @@
 
 {% block body %}
 
+    <h3>Makaleler</h3>
+    <hr>
 
-{% for article in  articles %}
-<div class="card">
-  <div class="card-header">
-    Makaleler
-  </div>
-  <div class="card-body">
-    
-        {% if article.id == 1 %}
-        
-            <h5 class="card-title">{{article.title}}</h5>
-            <p class="card-text">{{article.content}}</p> <br><br>
+    {% if articles %}
 
-        {% elif article.id == 2 %}
-            <h5 class="card-title">{{article.title}}</h5>
-            <p class="card-text">{{article.content}}</p> <br><br>
-        {% else %}
-            <h5 class="card-title">{{article.title}}</h5>
-            <p class="card-text">{{article.content}}</p>
-        {% endif %}
+      {% for article in  articles %}
+        <div class="card">
+          <div class="card-header">
+            {{article.author}}
+          </div>
+          <div class="card-body">
+              <h5 class="card-title">{{article.title}}</h5>
+              <p class="card-text">{{article.content}}</p> <br><br>
+          </div>
+        </div>
+      {% endfor %}
 
-    
-  </div>
-</div>
+    {% else %}
 
-{% endfor %}
+      <div class="alert alert-danger" role="alert">
+        Yayınlanmış herhangi bir makale bulunmadı!
+      </div>
+
+    {% endif %}
 
 {% endblock body %}
