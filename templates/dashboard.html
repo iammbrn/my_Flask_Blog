@@ -15,11 +15,11 @@
     <h5 class="card-title">iammbrn blog sayfasına hoşgeldiniz.</h5>
     <p class="card-text">Bu blog sayfası, iammbrn adına özel bir blog sayfasıdır.</p>
     {% if number == 1 %}
-        <a href="/addarticle" class="btn btn-primary">Makale Ekle</a> <br>
+        <a href="/addarticle" class="btn btn-success">Makale Ekle</a> <br>
     {% elif number == 2 %}
         <a href="/updatearticle" class="btn btn-primary">Makale Düzenle</a> <br>
     {% else %}
-        <a href="/deletearticle" class="btn btn-primary">Makale Sil</a>
+        <a href="/deletearticle" class="btn btn-danger">Makale Sil</a>
     {% endif %}
     
   </div>

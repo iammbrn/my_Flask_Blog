@@ -2,14 +2,14 @@
 
 
 {% block body %}
-
-{% from "includes/formhelpers.html" import render_field %}
-<form method="post">
     <h3>Giriş Yap</h3>
     <hr>
-    {{ render_field(form.username_or_email, class = "form-control") }}
-    {{ render_field(form.password, class = "form-control") }}
-    <button type="submit" class="btn btn-primary">Giriş Yap</button>
-</form>
+
+    {% from "includes/formhelpers.html" import render_field %}
+    <form method="post">
+        {{ render_field(form.username_or_email, class = "form-control") }}
+        {{ render_field(form.password, class = "form-control") }}
+        <button type="submit" class="btn btn-success">Giriş Yap</button>
+    </form>
 
 {% endblock body %}
