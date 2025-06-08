@@ -6,6 +6,13 @@
     <hr>
 
     {% if articles %}
+    
+      <form action = "/search" method = "POST">
+      <input class="mr-sm-2" type="search" name = "keyword" placeholder="Ara..." aria-label="Search">
+      <button class="btn btn-success" type="submit">Ara</button>
+      </form>
+
+      <hr>
 
       {% for article in  articles %}
         <div class="card">
@@ -14,7 +21,9 @@
           </div>
           <div class="card-body">
               <h5 class="card-title">{{article.title}}</h5>
-              <p class="card-text">{{article.content}}</p> <br><br>
+              <p class="card-text">{{article.content|safe}}</p>
+              <a href="/viewarticle/{{article.id}}" class="btn btn-primary">Görüntüle</a> <br> <br><br>
+
           </div>
         </div>
       {% endfor %}
