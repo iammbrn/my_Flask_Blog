@@ -150,14 +150,56 @@ def logout():
     return redirect(url_for("index"))
 
 
+# Creating article form
+class ArticleForm(Form):
+    title = StringField("Makale Başlığı", validators = [validators.Length(min = 5, max = 50)])
+    content = TextAreaField("Makale İçeriği", validators = [validators.Length(min = 10)])
+
+
+@app.route("/addarticle", methods = ["GET", "POST"])
+@login_required
+def addarticle():
+    form = ArticleForm(request.form)
+
+    if request.method == "POST" and form.validate():
+        entered_title = form.title.data
+        entered_content = form.content.data
+
+        cursor = mysql.connection.cursor()
+
+        query = "INSERT INTO articles(title, author, content) VALUES(%s, %s, %s)"
+
+        author = session["username"]
+
+        cursor.execute(query, (entered_title, author, entered_content))
+
+        mysql.connection.commit()
+
+        cursor.close()
+
+        flash("Makale başarıyla oluşturuldu.", "success")
+
+        return redirect(url_for("index"))
+
+    else:
+        return render_template("addarticle.html", form = form)
+
+
 @app.route("/articles")
 def articles():
-    articles = [
-        {"id": 1, "title": "Flask Nedir?", "content": "Flask, geliştiricilere basit ve anlaşılır bir yapı sunarak, web uygulamaları geliştirmeyi kolaylaştıran, minimalist bir Python framework’üdür. Karmaşıklığı değil, sadeliği sever. Her şeyi kutuyla birlikte sunmaz; ihtiyaç duyduğunda istediğin eklentiyi entegre edersin."},
-        {"id": 2, "title": "Machine Learning Nedir?", "content":"Machine Learning, makinelerin verilerden örüntüleri (patterns) öğrenerek yeni durumlarda tahminler yapabilmesini sağlayan matematiksel ve istatistiksel yöntemler bütünüdür."}
-    ]
+    cursor = mysql.connection.cursor()
+
+    query = "SELECT * FROM articles"
+
+    cursor.execute(query)
+
+    articles = cursor.fetchall()
+
+    if articles:
+        return render_template("articles.html", articles = articles)
     
-    return render_template("articles.html", articles = articles)
+    else:
+        return render_template("articles.html")
 
 @app.route("/article/<string:id>") #Dinamik URL yapısı ve kullanımı.
 def article(id):
